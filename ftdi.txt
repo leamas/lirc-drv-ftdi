@@ -1,0 +1,59 @@
+Mode2 receive/transmit driver for FTDI-based devices.
+=====================================================
+
+Mode2 receiver + transmitter using the bitbang mode of an FTDI
+USB-to-serial chip such as the FT232R, with a demodulating IR receiver
+connected to one of the FTDI chip's data pins -- by default, D1 (RXD).
+
+The driver expects a --device specification which is comma-separated list
+of key-value pairs e. g.,
+
+    --device=serial=A4001doI,input=7
+
+All settings are optional, and have reasonable defaults.
+
+| Key     | Value                                      |
+|---------|--------------------------------------------|
+| vendor  | Vendor code (default 0x0403 for FTDI)      |
+| product | Product code (default 0x6001 for FT232)    |
+| desc    | Description string (default = not defined) |
+| serial  | Serial string (default = not defined)      |
+| input   | Input bit number (0..7, default = 1)       |
+| output  | See input                                  |
+| baud    | To be determined                           |
+| txbaud  | To be determined                           |
+
+
+Dependencies
+------------
+
+Building this driver requires lirc v 0.9.3+. You need the header files,
+the unversioned dynamic libraries and the pkg-config support (.pc
+filed). Typically, this lives in a package called lirc-devel.
+
+The build also requires the libftdi library [1]. This is packaged
+in some distributions; typically you should install libftdi-level.
+
+
+Build, install and check
+------------------------
+
+With dependencies in place the build is trivial:
+
+    $ make
+    $ sudo make install
+
+The makefile respects CFLAGS and LDFLAGS if they are set in the environment
+during the build.
+
+After the installation, check the results using lirc-lsplugins:
+
+    $ lirc-lsplugins ftdi
+    ftdi                -as   /usr/lib64/lirc/plugins/ftdi.so
+
+
+Adding the *--long* option gives more info on the driver.
+
+
+
+[1]  http://www.intra2net.com/de/produkte/opensource/ftdi/
